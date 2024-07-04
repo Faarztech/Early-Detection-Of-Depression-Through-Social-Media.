@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Depression Prediction Application</title>
+  <meta name="description" content="DeepBreath: Depression Test">
+  <meta name="keywords" content="Depression Test using Machine Learning">
+
+  <!-- Google Fonts -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+    }
+
+    .navbar {
+      background-color: #fff;
+      border-bottom: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand img {
+      width: 80px;
+      height: auto;
+      border-radius: 50%;
+    }
+
+    .navbar-nav .nav-link {
+      color: #000; /* Changed to dark color */
+      font-weight: 500;
+      transition: all 0.3s ease-in-out;
+      font-size: 20px;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #007bff;
+    }
+
+    .btn-appoint {
+      background-color: #007bff;
+      border-color: #007bff;
+      color: #fff;
+      font-weight: 500;
+      transition: all 0.3s ease-in-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-appoint::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .btn-appoint:hover::before {
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      opacity: 1;
+    }
+
+    #cta-2 {
+      background-color: #fff;
+      padding: 60px 0;
+    }
+
+    .section-title {
+      color: #333;
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    .lg-line {
+      line-height: 36px;
+    }
+
+    /* Additional Styling */
+    .banner-logo img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 20px;
+    }
+
+    .banner-text h1 {
+      color: #333;
+      font-size: 42px;
+      font-weight: 700;
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
+
+    .banner-text p {
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+
+    /* White hamburger menu */
+    .navbar-toggler {
+      color: #000;
+    }
+
+    .navbar-toggler.white {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!--banner-->
+  <section id="banner" class="banner">
+    <div class="bg-color">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+          <a class="navbar-brand" href="#">
+            <img class="logo" src="https://img.freepik.com/premium-photo/manipulator-abuser-black-man-head-hand-with-strings-fingers-isolated-white-background-male-trying-dominate-relationship-control-another-person_361816-5273.jpg?w=826" alt="error">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar" aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="/service">Quiz Based Test</a></li>
+              <li class="nav-item"><a class="nav-link" href="/sentiment">Sentiment Based Test</a></li>
+              <li class="nav-item"><a class="nav-link" href="/remedies">Remedies</a></li>
+              <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+              <li class="nav-item"><a class="nav-link" href="/model">Models</a></li>
+              <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
+              <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <div class="row">
+          <div class="banner-info">
+            <div class="banner-logo text-center">
+              <img src="{{url_for('static',filename='img/bright1.png')}}" class="img-r">
+            </div>
+            <div class="banner-text text-center">
+              <h1>Depression Test</h1>
+              <p>Add meaning to your life</p>
+              <a href="/service" class="btn btn-appoint">Test Yourself</a>
+            </div>
+            <div class="overlay-detail text-center">
+              <a href="#service"><i class="fa fa-angle-down"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ banner-->
+  <!--cta 2-->
+  <section id="cta-2" class="section-padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="text-right-md col-md-4 col-sm-4">
+          <h class="section-title lg-line">« A few words about us »</h>
+        </div>
+        <div class="col-md-4 col-sm-5">
+          <p>We, the Students from VTU, B.E - Computer Science & Engineering, are dedicated to developing applications for Depression Detection using Social Media (Twitter).</p>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+  </section>
+  <!--cta-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const navbarToggler = document.querySelector('.navbar-toggler');
+      navbarToggler.addEventListener('click', function () {
+        navbarToggler.classList.toggle('white');
+      });
+    });
+  </script>
+</body>
+
+</html>

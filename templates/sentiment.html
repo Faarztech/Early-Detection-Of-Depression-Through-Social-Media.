@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Depression Prediction Application</title>
+  <meta name="description" content="DeepBreath: Depression Test">
+  <meta name="keywords" content="Depression Test using Machine Learning">
+
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+  <style>
+    textarea {
+      max-width: 100%;
+      max-height: 200px;
+    }
+
+    .img {
+      border-radius: 50px;
+    }
+
+    .img-responsive {
+      border-radius: 20px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    li,
+    a,
+    button {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+      color: #333;
+      text-decoration: none;
+    }
+
+    button {
+      padding: 12px 30px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease 0s;
+      margin: 20px auto 20px auto;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    button::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.3s ease-in-out;
+    }
+
+    button:hover::before {
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      opacity: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 10%;
+      margin: 0px;
+    }
+
+    .division {
+      text-align: right;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+    }
+
+    .navbar {
+      background-color: #fff;
+      border-bottom: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px 10%;
+    }
+
+    .navbar-brand img {
+      width: 80px;
+      height: auto;
+      border-radius: 50%;
+    }
+
+    .navbar-nav .nav-link {
+      color: #555;
+      font-weight: 500;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #007bff;
+    }
+
+    .banner-text h1,
+    .banner-text p {
+      color: #333;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .btn-primary:hover::before {
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      opacity: 1;
+    }
+
+    .section-padding {
+      padding: 80px 10%;
+    }
+
+    .ser-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: #333;
+    }
+
+    .md-form h5 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .medi-info h3 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .medi-info p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    button.big-button {
+      padding: 12px 30px;
+      background-color: rgba(0, 136, 169, 1);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease 0s;
+      margin: 20px auto 20px auto;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    button.big-button:hover {
+      background-color: #000;
+      border: 1px solid #4070f4;
+    }
+
+    /* Media queries for responsiveness */
+    @media (max-width: 992px) {
+      .navbar-collapse {
+        padding: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-collapse {
+        background-color: #fff; /* Change background color of collapsed navbar */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow to collapsed navbar */
+        padding: 20px 0; /* Adjust padding */
+      }
+
+      .navbar-nav {
+        text-align: center; /* Center-align navbar links */
+      }
+
+      .navbar-nav .nav-link {
+        display: block; /* Make navbar links display as blocks */
+        margin-bottom: 10px; /* Add space between navbar links */
+      }
+
+      .navbar-brand img {
+        margin-bottom: 10px; /* Add space below navbar brand */
+      }
+
+      .banner-text h1 {
+        font-size: 28px; /* Decrease font size of banner heading */
+      }
+
+      .banner-text p {
+        font-size: 14px; /* Decrease font size of banner paragraph */
+      }
+    }
+
+  </style>
+</head>
+
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+  <!--banner-->
+  <section id="banner" class="banner">
+    <div class="bg-color">
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="col-md-12">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">
+                <img class="logo" src="https://img.freepik.com/premium-photo/manipulator-abuser-black-man-head-hand-with-strings-fingers-isolated-white-background-male-trying-dominate-relationship-control-another-person_361816-5273.jpg?w=826" alt="error" width="100px" height="80px">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+              <ul class="navbar-nav">
+                <li><a href="/index" class="/index">
+                  <button class="big-button">Home</button>
+              </a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <div class="row">
+          <div class="banner-info">
+            <div class="banner-logo text-center">
+              <img src="{{url_for('static',filename='img/bright1.png')}}" class="img-r" width="400px" height="100px">
+            </div>
+            <div class="banner-text text-center">
+              <h1>Depression Test</h1>
+              <p>Add meaning to your life</p>
+              <a href="#service" class="btn btn-primary">Test Yourself</a>
+            </div>
+            <div class="overlay-detail text-center">
+              <a href="#service"><i class="fa fa-angle-down"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ banner-->
+
+  <!--service-->
+  <form action="/predictSentiment" method="POST">
+    <section id="service" class="section-padding">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <h2 class="ser-title">Test Yourself</h2>
+            <br>
+          </div>
+        </div><!-- End of  row-->
+
+        <form action="/predictSentiment" method="POST">
+          <div class="row">
+            <div class="col-md-8 col-sm-8">
+              <div class="md-form">
+                <h5>Write something about how you feel in a sentences</h5>
+                <textarea required="required" id="form10" name="form10" class="md-textarea form-control" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+            </div>
+          </div><!-- End of row-->
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <br>
+              <button class="btn btn-primary" type="submit">See Result</button>
+            </div>
+          </div>
+        </form><!-- End of form-->
+
+      </div>
+    </section>
+  </form>
+  <!--/ service-->
+
+  <!--cta-->
+  <section id="cta-1" class="section-padding">
+    <div class="container">
+      <div class="row">
+        <div class="schedule-tab">
+          <div class="col-md-12 col-sm-12">
+            <div class="mt-boxy-color"></div>
+            <div class="medi-info">
+              <h3>Disclaimer</h3>
+              <p>This information is not designed to replace a physician's independent judgment about the appropriateness or risks of a procedure for a given patient. Always consult your doctor about your medical conditions. Use of this application is conditional upon your acceptance of our User Agreement. </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>

@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="shortcut icon" href="images/cheese-burger.png">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Depression Detection</title>
+
+
+<style>
+    /* Default styling */
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    outline: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+}
+
+/* Resetting default font size to 10px */
+html{
+    font-size: 62.5%;
+}
+
+/* Navbar styling */
+.navbar{
+    position: fixed;
+    top: -14rem;
+    z-index: 5;
+    width: 100%;
+    height: 12rem;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0.2rem 0.2rem 0.2rem #000;
+    transition: top 0.5s;
+}
+
+.navbar.change{
+    top: 0;
+    transition: top 0.5s 0.2s;
+}
+
+.nav-link{
+    color: #aaa;
+    margin: 0 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: color 0.4s;
+}
+
+.change .nav-link{
+    opacity: 1;
+}
+
+.change .nav-link:nth-child(1){
+    transition: opacity 0.4s 0.5s, color 0.4s;
+}
+
+.change .nav-link:nth-child(2){
+    transition: opacity 0.4s 0.6s, color 0.4s;
+}
+
+.change .nav-link:nth-child(3){
+    transition: opacity 0.4s 0.7s, color 0.4s;
+}
+
+.change .nav-link:nth-child(4){
+    transition: opacity 0.4s 0.8s, color 0.4s;
+}
+
+.change .nav-link:nth-child(5){
+    transition: opacity 0.4s 0.9s, color 0.4s;
+}
+
+.nav-link:hover{
+    color: #ffffff;
+}
+
+.nav-link i{
+    font-size: 4rem;
+}
+
+.nav-link span{
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.menu{
+    cursor: pointer;
+    position: fixed;
+    top: 1rem;
+    left: 5rem;
+    width: 4rem;
+    height: 6rem;
+    z-index: 4;
+    background-color: #000;
+    border-radius: 30rem 30rem 15rem 15rem;
+    box-shadow: 0.1rem 0.1rem 0.1rem #000, -0.1rem -0.1rem 0.1rem #000;
+    transition: top 0.5s 0.2s;
+    animation: menu-shake 0.2s ease-in-out 1s 8;
+}
+
+.menu::before{
+    content: "";
+    width: 0.3rem;
+    height: 15rem;
+    background-color: #000;
+    position: absolute;
+    top: -15rem;
+    box-shadow: 0.1rem 0 0.1rem #000;
+    left: calc(50% - 0.15rem);
+}
+
+.menu.change{
+    top: 14rem;
+    transition: top 0.5s;
+}
+
+/* First section styling */
+.section-1{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+background: #e6b3b3;
+}
+
+.section-heading{
+    font-size: 10rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-align: center;
+    text-transform: capitalize;
+    letter-spacing: 0.5rem;
+    text-shadow: 0.3rem 0.3rem 0.3rem #000;
+}
+
+h2.section-heading{
+    font-size: 6rem;
+}
+h2.section-heading-1{
+    font-size: 30px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    color: #f1ebeb;
+    text-align: center;
+    text-transform: capitalize;
+    letter-spacing: 0.5rem;
+    text-shadow: 0.3rem 0.3rem 0.3rem #000;
+    font-weight: bold;
+}
+
+.section-1-icons i{
+    font-size: 28rem;
+    color: #f96209;
+    position: absolute;
+    transform: translate(-50%, -50%) scale(0);
+    text-shadow: 0.2rem 0.2rem 0.2rem #000;
+    transition: transform 0.3s;
+}
+
+.section-1-icons .change{
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 0.2s 0.2s;
+}
+
+/* Second section styling */
+.section-2{
+    background-color: #ebebeb;
+    width: 100%;
+    height: 100vh;
+    padding: 6rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cards-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.card{
+    position: relative;
+    width: 34rem;
+    background: linear-gradient(to right, #eff0ef, #f0eeee);
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 1rem 1rem 1rem #000;
+    transform: rotateY(20deg) skewX(-2deg);
+    transition: transform 0.5s, box-shadow 0.5s;
+}
+
+.card:hover{
+    transform: rotateY(20deg) skewX(-2deg) translateY(-2rem);
+    box-shadow: 2rem 2rem 2rem #000;
+}
+
+.card::before{
+    content: "";
+    height: 100%;
+    width: 1rem;
+    background-color: #190114;
+    position: absolute;
+    top: 0;
+    left: -1rem;
+    transform: skewY(45deg);
+    transform-origin: right;
+    box-shadow: -0.1rem -0.1rem 0.1rem #000;
+}
+
+.card::after{
+    content: "";
+    height: 1rem;
+    width: 100%;
+    background-color: rgba(2, 2, 137, 0.173)
+    position: absolute;
+    top: -1rem;
+    left: 0;
+    transform: skewX(45deg);
+    transform-origin: bottom;
+    box-shadow: -0.1rem -0.1rem 0.1rem #000;
+}
+
+.card-img{
+    width: 100%;
+}
+
+.card-name{
+    font-size: 20px;
+    font-weight: 600;
+    margin: 2rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5rem;
+    color: #111;
+    text-shadow: 0.15rem 0.15rem 0.15rem #000;
+}
+
+.card-btn{
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.2rem;
+    text-transform: capitalize;
+    box-shadow: -0.2rem -0.2rem 0.1rem #000;
+    border: none;
+    width: 70%;
+    background-color: #111;
+    color: #888;
+    border-radius: 4rem;
+    padding: 0.8rem 0;
+    cursor: pointer;
+}
+
+/* Third section styling */
+.section-3{
+    padding: 5rem 0;
+}
+
+.gallery{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 8rem;
+}
+
+.gallery-link{
+    position: relative;
+    margin: 4rem 1rem;
+    cursor: pointer;
+}
+
+.gallery-link::before{
+    content: "";
+    position:inherit;
+    top: 2vw;
+    left: 90%;
+    width: 0.2rem;
+    height: 0;
+    background-color: #ffffff;
+    transition: height 0.5s;
+    z-index: 2;
+}
+
+.gallery-link:hover::before{
+    height: 80%;
+}
+
+.gallery-link::after{
+    content: "";
+    position: absolute;
+    top: 30%;
+    left: 2rem;
+    width: 0;
+    height: 0.2rem;
+    background-color: #ffffff;
+    transition: width 0.5s;
+}
+
+.gallery-link:hover::after{
+    width: 90%;
+}
+
+.raw-img{
+    width: 24vw;
+    height: 15vw;
+    object-fit: cover;
+    box-shadow: 0.2rem 0.2rem 0.1rem #e92929, 0.4rem 0.4rem 0.1rem #a2e946, 0.6rem 0.6rem 0.1rem #297ce9, 0.8rem 0.8rem 0.1rem #e92999;
+    transition: all 0.5s;
+}
+
+.gallery-link:hover .raw-img{
+    transform: scale(1.1);
+    opacity: 0.5;
+    filter: blur(0.5rem);
+    box-shadow: 1rem 1rem 0.1rem #e92929, 2rem 2rem 0.1rem #a2e946, 3rem 3rem 0.1rem #297ce9, 4rem 4rem 0.1rem #e92999;
+}
+
+.raw-name{
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s;
+}
+
+.gallery-link:hover .raw-name{
+    width: 100%;
+    transition: width 1.5s 0.4s;
+}
+
+.raw-description{
+    width: 90%;
+    position: absolute;
+    bottom: 8vh;
+    left: 2rem;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    color: #0e0e0e;
+    font-weight: 300;
+    text-transform: uppercase;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+}
+
+.gallery-link:hover .raw-description{
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1s 1s;
+}
+
+/* Fourth section styling */
+.section-4{
+    position: relative;
+    width: 100%;
+    height: 30vh;
+    background-color: #222;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 3rem 0;
+}
+
+.section-4-text{
+    text-transform: uppercase;
+}
+
+.section-4-heading{
+    font-weight: 800;
+    font-size: 4rem;
+    color: #f68a06;
+}
+
+.section-4-p{
+    font-size: 1.6rem;
+    color: #888;
+}
+
+.sign-up{
+    display: flex;
+    align-items: center;
+    position: relative;
+    left: 2.25rem;
+}
+
+.signup-form-input{
+    width: 32rem;
+    height: 5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    color: #f96209;
+    padding: 1rem;
+    border: .2rem solid #f68a06;
+}
+
+.signup-form-input::placeholder{
+    color: #ffbe6f;
+}
+
+.signup-form-btn{
+    width: 4rem;
+    height: 4rem;
+    background-color: #333;
+    color: #f47308;
+    transform: translate(-4.5rem);
+    font-size: 1.8rem;
+    cursor: pointer;
+    border: none;
+}
+
+.copyright{
+    position: absolute;
+    color: #eee;
+    font-weight: 300;
+    padding-top: 2rem;
+    width: 100%;
+    border-top: 0.1rem solid #888;
+    letter-spacing: 0.1rem;
+    bottom: 2rem;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+/* animation for menu icon */
+
+@keyframes menu-shake {
+    0%{
+        transform: rotateZ(0deg);
+        transform-origin: top;
+    }
+
+    50%{
+        transform: rotateZ(20deg);
+        transform-origin: top;
+    }
+
+    100%{
+        transform: rotateZ(-20deg);
+        transform-origin: top;
+    }
+}
+
+/* responsive code */
+@media (max-width: 1400px) {
+    html{
+        font-size: 50%;
+    }
+
+    .section-2{
+        height: auto;
+        padding: 10rem 0 12rem 0;
+    }
+
+    .cards-container{
+        margin-top: 10rem;
+    }
+
+    .gallery-link{
+        width: 42rem;
+        height: 24rem;
+        margin: 5rem;
+    }
+
+    .raw-img{
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media (max-width: 1000px){
+    .section-heading{
+        font-size: 9rem;
+        margin: 0 5rem;
+    }
+
+    .raw-description{
+        bottom: 10vh;
+    }
+
+    h2.section-heading{
+        font-size: 5rem;
+    }
+
+    .section-1-icons i{
+        font-size: 24rem;
+    }
+
+    .cards-container{
+        flex-wrap: wrap;
+    }
+
+    .card{
+        margin: 5rem;
+    }
+
+    .section-4{
+        height: 24rem;
+    }
+}
+
+@media (max-width: 900px){
+    .nav-link{
+        margin: 3rem;
+    }
+
+    .nav-link i{
+        font-size: 3.2rem;
+    }
+
+    .nav-link span{
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 700px){
+    .section-heading{
+        font-size: 7rem;
+        margin: 0 8rem;
+    }
+
+    h2.section-heading{
+        font-size: 3.2rem;
+    }
+
+    .section-1-icons i{
+        font-size: 20rem;
+    }
+
+    .menu{
+        left: 2rem;
+    }
+
+    .section-4{
+        height: 32rem;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .section-4-text{
+        margin-bottom: 6rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 540px){
+    html{
+        font-size: 40%;
+    }
+
+    .nav-link{
+        margin: 0 0.8rem;
+    }
+}
+.card-img{
+    border-radius: 40px;
+}
+
+.raw-name{
+color: #190114;
+}
+
+</style>
+
+</head>
+<>
+    <!-- Navbar -->
+    <!-- <nav class="navbar target">
+        <a href="/index" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#yoga" class="nav-link">
+            <i class="fas fa-yoga"></i>
+            <span>yoga</span>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-meditation"></i>
+            <span>meditation</span>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-spa"></i>
+            <span>spa</span>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-walking"></i>
+            <span>walks</span>
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-"></i>
+            <span>reading</span>
+        </a>
+    </nav> -->
+
+    <nav class="navbar target">
+        <a href="/index" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="#yoga" class="nav-link">
+          <i class="fas fa-heartbeat"></i>
+          <span>Health</span>
+        </a>
+        <a href="#meditation" class="nav-link">
+          <i class="fas fa-spa"></i>
+          <span>meditation</span>
+        </a>
+        <a href="#Serenity" class="nav-link">
+            <i class="fas fa-walking"></i>
+            <span>yoga</span>
+        </a>
+        <a href="#Nutrition" class="nav-link">
+          <i class="fas fa-apple-alt"></i>
+          <span>Nutrition</span>
+        </a>
+       
+      </nav>
+    <div class="menu target"></div>
+
+    <div class="container">
+        <!-- first section -->
+
+        <section class="section-1" >
+            <h1 class="section-heading">
+                REMEDI
+            </h1>
+            <div class="section-1-icons">
+                <i class="fas fa-biohazard change"></i>
+                <i class="fas fa-procedures "></i>
+                <i class="fas fa-pills "></i>
+                <i class="fas fa-head-side-cough "></i>
+                <i class="fas fa-pros-and-cons "></i>
+                <i class="fas fa-sad-tear "></i>
+                <i class="fas fa-dizzy "></i>
+                <i class="fas fa-allergies "></i>
+                <i class="fas fa-unlink "></i>
+                <i class="fas fa-heart-broken "></i>
+            </div>
+            
+        </section>
+
+       
+        <!-- 4 section -->
+        <section class="section-3" id="yoga">
+            <h2 class="section-heading" style="color: black;">
+                A Collection of Yoga Poses and Meditation Images
+            </h2>
+            <div class="gallery">
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/1472887/pexels-photo-1472887.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Mountain Pose</h3>
+                    <p class="raw-description">
+                        This pose teaches you to stand with majestic steadiness like a mountain, improving focus and concentration.
+
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/8436587/pexels-photo-8436587.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Balasana</h3>
+                    <p class="raw-description">
+                        This pose helps warm up your back and works your core without stressing your wrists and shoulders. It stretches the lower back and tones the shoulders.
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/8436581/pexels-photo-8436581.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Downward-Facing Dog</h3>
+                    <p class="raw-description">
+                        This foundational pose strengthens the arms, shoulders, and legs while stretching the hamstrings and calves.
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/4327033/pexels-photo-4327033.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Embrace Serenity</h3>
+                    <p class="raw-description">
+                        This one-line explanation highlights the benefits of meditation in promoting inner peace and happiness, as well as the holistic approach to wellness presented in the book
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/8172916/pexels-photo-8172916.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Meditation.
+                    </h3>
+                    <p class="raw-description">
+                        a journey of self-discovery through meditation.    
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/8172933/pexels-photo-8172933.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Vrksasana</h3>
+                    <p class="raw-description">
+                        This pose strengthens the legs and tones the entire body. It also improves balance and concentration.
+                    </p>
+                </a>
+            </div>
+        </section>
+
+        <!-- 4 section -->
+        <section class="section-3" id="meditation">
+            <h2 class="section-heading" style="color: black;">
+                Discover the Art of Mindfulness
+            </h2>
+            <div class="gallery">
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/3760611/pexels-photo-3760611.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Hatha Yoga</h3>
+                    <p class="raw-description">
+                        This is a gentle form of yoga that focuses on breathing and basic postures. It is ideal for beginners.
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/3094215/pexels-photo-3094215.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Ashtanga</h3>
+                    <p class="raw-description">
+                        This is a physically demanding form of yoga that involves a set sequence of postures, each held for five breaths.
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/4498220/pexels-photo-4498220.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Power Yoga</h3>
+                    <p class="raw-description">
+                        This is a physically demanding form of yoga that involves a series of flowing postures designed to build strength and endurance.
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/5384530/pexels-photo-5384530.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Anusara Yoga</h3>
+                    <p class="raw-description">
+                        This type of yoga emphasizes the alignment of the body and the heart, and encourages students to express themselves through their practice.                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/5302862/pexels-photo-5302862.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Bhakti Yoga
+                    </h3>
+                    <p class="raw-description">
+                        This type of yoga focuses on devotion and love, and involves chanting, singing, and meditation.
+                    </p>
+                </a>
+                <a class="gallery-link" >
+                    <img class="raw-img" src="https://images.pexels.com/photos/6303709/pexels-photo-6303709.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+                    <h3 class="raw-name">Restorative Yoga</h3>
+                    <p class="raw-description">
+                        This is a gentle form of yoga that uses props to support the body in relaxing poses, promoting deep relaxation and stress relief.
+                    </p>
+                </a>
+            </div>
+        </section>
+        <!-- fourth section -->
+
+<!-- 4 section -->
+<section class="section-3" id="Serenity">
+    <h2 class="section-heading" style="color: black;">
+        Embracing Serenity: A Journey Through Meditation
+    </h2>
+</h2>
+<div class="gallery">
+    <a class="gallery-link" >
+        <img class="raw-img" src="https://yogaworks.com/wp-content/uploads/2023/12/vytas-2310.png">
+        <h3 class="raw-name">Embracing Strength</h3>
+        <p class="raw-description">
+            One of the key advantages of slow movement lies in the realm of strength training
+        </p>
+    </a>
+    <a class="gallery-link" >
+        <img class="raw-img" src="https://sirs.edu.in/wp-content/uploads/2023/06/SIR_3490.jpg">
+        <h3 class="raw-name">Embracing Nature's Serenity</h3>
+        <p class="raw-description">
+            Learning to teach and practice Sport Yoga can give you joy, better health and a new career.        </p>
+    </a>
+    <a class="gallery-link" >
+        <img class="raw-img" src="https://eadn-wc04-11125113.nxedge.io/wp-content/uploads/2023/07/benefits-of-practicing-yoga-outdoors.jpg">
+        <h3 class="raw-name">Bliss of Outdoor Yoga</h3>
+        <p class="raw-description">
+            This is a physically demanding form of yoga that involves a series of flowing postures designed to build strength and endurance.
+        </p>
+    </a>
+    <a class="gallery-link" >
+        <img class="raw-img" src="https://educatefitness.co.uk/wp-content/uploads/2023/05/Outdoor-Workouts-Embrace-the-Great-Outdoors-for-Fun-and-Effective-Fitness.jpg">
+        <h3 class="raw-name">movement meditation</h3>
+        <p class="raw-description">
+            Movement meditation is a practice that involves being mindful of the sensations that occur during various movements, such as walking or even going to bed.   
+        </p> 
+        </a>
+    <a class="gallery-link" >
+        <img class="raw-img" src="https://www.jllfitness.co.uk/blog/wp-content/uploads/2022/10/AdobeStock_323634847-300x200.jpeg">
+        <h3 class="raw-name">Nature Walks
+        </h3>
+        <p class="raw-description">
+            Walking in natural surroundings can boost your mood, reduce stress, and improve mental and emotional health.        </p>
+    </a>
+    <a class="gallery-link" >
+        <img class="raw-img" src="https://images.pexels.com/photos/7718482/pexels-photo-7718482.jpeg">
+        <h3 class="raw-name">Mindful Walking</h3>
+        <p class="raw-description">
+            Practicing mindfulness during your walk, such as being aware of your breath and the sensations in your body and enhancing mental clarity
+        </p>
+    </a>
+</div>
+</section>
+<!-- fourth section -->
+
+
+<!-- 4 section -->
+<section class="section-3" id="Nutrition">
+    <h2 class="section-heading" style="color: black;">
+        Nourish Your Mind and Body:A Guide to Nutrition and Wellness
+    </h2>
+    <div class="gallery">
+        <a class="gallery-link" >
+            <img class="raw-img" src="https://www.culinarynutrition.com/wp-content/uploads/2018/03/greens-2-e1554327433988.jpg">
+            <h3 class="raw-name">Dark Leafy Vegetables</h3>
+            <p class="raw-description">
+                Dark green vegetables are rich in vitamins A, C. These nutrients protect bones protect against some types of cancers.
+            </p>
+        </a>
+        <a class="gallery-link" >
+            <img class="raw-img" src="https://www.osfhealthcare.org/blog/wp-content/uploads/2021/06/leafy-greens-ft-765x310.jpg">
+            <h3 class="raw-name">Leafy Greens</h3>
+            <p class="raw-description">
+                Leafy green vegetables like kale and spinach are high in vitamins, minerals, and fiber.
+            </p>
+        </a>
+        <a class="gallery-link" >
+            <img class="raw-img" src="https://www.rzonefitness.com/wp-content/uploads/2019/01/proteins.jpg">
+            <h3 class="raw-name">Protein Ingredients</h3>
+            <p class="raw-description">
+                Proteins are made up of amino acids, which are the building blocks of protein. Amino acids are simple organic compounds 
+            </p>
+        </a>
+        <a class="gallery-link" >
+            <img class="raw-img" src="https://food.unl.edu/newsletters/images/food-groups.png">
+            <h3 class="raw-name">Fruits and vegetables</h3>
+            <p class="raw-description">
+                Fruits and vegetables contain important vitamins, minerals and plant chemicals.
+            </p>
+        </a>
+        <a class="gallery-link" >
+            <img class="raw-img" src="https://www.guardian.in/cdn/shop/articles/vitamin-d-food.jpg?v=1691563301&width=1000">
+            <h3 class="raw-name">Vitamin-D Nutrients
+            </h3>
+            <p class="raw-description">
+                Vitamin D is a fat-soluble vitamin that helps regulate calcium and phosphate levels in the body.
+            </p>
+            </a>
+        <a class="gallery-link" >
+            <img class="raw-img" src="https://images.everydayhealth.com/images/diet-nutrition/what-is-vitamin-d-guide-1440x810.jpg?sfvrsn=322cd9c6_5">
+            <h3 class="raw-name">PureBites</h3>
+            <p class="raw-description">
+                Vitamin D is both a nutrient we eat and a hormone our bodies make.
+            </p>
+        </a>
+    </div>
+</section>
+<!-- fourth section -->
+
+        <section class="section-4" id="Contact">
+           
+            </form>
+            <p class="copyright">
+                Student &copy; 2024
+            </p>
+        </section>
+
+    </div>
+    
+    <script>
+        const menu = document.querySelector('.menu');
+const targets = document.querySelectorAll('.target');
+const icons = document.querySelectorAll('.section-1-icons i');
+let i = 1; //counter variable
+
+menu.addEventListener('click', () => {
+    targets.forEach((target) => {
+        target.classList.toggle('change');
+    });
+});
+
+setInterval(() => {
+    i++
+    const icon1 = document.querySelector('.section-1-icons .change');
+
+    icon1.classList.remove('change');
+
+    //when last icon is reached, return to the first icon, else keep going.
+    if(i > icons.length){
+        icons[0].classList.add('change');
+        i = 1;
+    } else {
+        icon1.nextElementSibling.classList.add('change');  
+    } 
+
+}, 3000);
+    </script>
+
+</body>
+</html>
